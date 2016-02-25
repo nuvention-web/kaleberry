@@ -1,4 +1,4 @@
-var API_ROOT = 'localhost:3000';
+var API_ROOT = 'http://localhost:5000';
 var API_ENDPOINTS = {
   INFLUENCERS: API_ROOT + '/influencers',
 };
