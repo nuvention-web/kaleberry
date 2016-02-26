@@ -29528,9 +29528,44 @@ var InfluencersResultsContent = React.createClass({displayName: "InfluencersResu
 
   render: function(){
 
+    var someTestInfluencers = [
+      {
+        name: "Spike",
+        imageLink : "#",
+        badges : ["Bashful"],
+        industry: "Food",
+        socialLinks : [
+          {
+            name: "Twitter",
+            link: "http://twitter.com"
+          },
+          {
+            name: "Facebook",
+            link: "http://facebook.com"
+          }
+        ]
+      },
+      {
+        name: "Harry",
+        imageLink : "#",
+        industry: "Sports",
+        badges : ["Grumpy", "Sneezy"],
+        socialLinks : [
+          {
+            name: "Twitter",
+            link: "http://twitter.com"
+          },
+          {
+            name: "Facebook",
+            link: "http://facebook.com"
+          }
+        ]
+      }
+    ];
+
     return(
       React.createElement("div", {className: "container"}, 
-        React.createElement(InfluencersResultsRow, null)
+        React.createElement(InfluencersResultsRow, {influencers: someTestInfluencers})
       )
     );
   }
@@ -29543,12 +29578,32 @@ var React = require('react');
 
 var BadgeList = React.createClass({displayName: "BadgeList",
   render: function(){
+
+    var createBadge = function(tagName){
+      return React.createElement("span", {className: "badge"}, tagName) ;
+    };
+
     return(
-      this.props.tags.map(function(name){
-        return React.createElement("span", {className: "badge"}, name)
-      })
+      React.createElement("div", null, " ", this.props.tags.map(createBadge), " ")
     );
   }
+
+});
+
+var ListOfLinks = React.createClass({displayName: "ListOfLinks",
+  render: function(){
+    var createListItem = function(linkSet){
+      console.log(linkSet.link);
+      return React.createElement("li", null, React.createElement("a", {href: linkSet.link}, " ", linkSet.name, " "))
+    };
+
+    return (
+      React.createElement("ul", null, 
+        this.props.links.map(createListItem)
+      )
+    );
+  }
+
 });
 
 var InfluencersResultsProfile = React.createClass({displayName: "InfluencersResultsProfile",
@@ -29562,7 +29617,6 @@ var InfluencersResultsProfile = React.createClass({displayName: "InfluencersResu
       textDecoration: "none",
       textAlign: "center"
     }
-
     return(
       React.createElement("div", {className: "col-md-3"}, 
         React.createElement("div", {className: "panel panel-default"}, 
@@ -29570,10 +29624,11 @@ var InfluencersResultsProfile = React.createClass({displayName: "InfluencersResu
             React.createElement("a", {href: "profile.html"}, React.createElement("img", {src: this.props.imageLink, className: "img-responsive"}))
           ), 
           React.createElement("div", {className: "panel-footer"}, 
+
             React.createElement("a", {href: "profile.html", style: nameStyle}, React.createElement("h3", null, this.props.name)), 
-            React.createElement("ul", null, 
-              React.createElement("li", null, React.createElement("a", {href: "https://twitter.com/DansReview"}, "195k Twitter"))
-            )
+            React.createElement("h5", {style: nameStyle}, this.props.industry), 
+            React.createElement(ListOfLinks, {links: this.props.socialLinks}), 
+            React.createElement(BadgeList, {tags: this.props.badges})
 
           )
         )
@@ -29585,26 +29640,26 @@ var InfluencersResultsProfile = React.createClass({displayName: "InfluencersResu
 var InfluencersResultsRow = React.createClass({displayName: "InfluencersResultsRow",
   getInitialState: function(){
     var influencerList = {};
-      influencerList[1] = { name: 'Joey', imageLink: 'http://cdn4.list25.com/wp-content/uploads/2013/04/22-24_tn.jpg'};
-
     return { influencers: influencerList };
   },
 
   render: function(){
 
-    var createInfluencerProfile = function(infName, link){
-      return React.createElement(InfluencersResultsProfile, {name: infName, imageLink: link});
+    var createInfluencerProfile = function(inf){
+      return React.createElement(InfluencersResultsProfile, {
+        name: inf.name, 
+        imageLink: inf.imageLink, 
+        badges: inf.badges, 
+        socialLinks: inf.socialLinks, 
+        industry: inf.industry}
+
+      );
     };
 
+    console.log(this.props.influencers)
     return (
       React.createElement("div", {className: "row"}, 
-         Object.keys(this.props.influencers).forEach(function (key) {
-          var curInf = this.props.influencers[key];
-          return (
-            React.createElement(InfluencersResultsProfile, {name: curInf[name], imageLink: curInf[imageLink]})
-          );
-          }
-        )
+        this.props.influencers.map(createInfluencerProfile)
       )
     );
   }

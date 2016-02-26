@@ -2,12 +2,32 @@ var React = require('react');
 
 var BadgeList = React.createClass({
   render: function(){
+
+    var createBadge = function(tagName){
+      return <span className = "badge">{tagName}</span> ;
+    };
+
     return(
-      this.props.tags.map(function(name){
-        return <span className = "badge">{name}</span>
-      })
+      <div> {this.props.tags.map(createBadge)} </div>
     );
   }
+
+});
+
+var ListOfLinks = React.createClass({
+  render: function(){
+    var createListItem = function(linkSet){
+      console.log(linkSet.link);
+      return <li><a href = {linkSet.link}> {linkSet.name} </a></li>
+    };
+
+    return (
+      <ul>
+        {this.props.links.map(createListItem)}
+      </ul>
+    );
+  }
+
 });
 
 var InfluencersResultsProfile = React.createClass({
@@ -21,7 +41,6 @@ var InfluencersResultsProfile = React.createClass({
       textDecoration: "none",
       textAlign: "center"
     }
-
     return(
       <div className = "col-md-3">
         <div className="panel panel-default">
@@ -29,10 +48,11 @@ var InfluencersResultsProfile = React.createClass({
             <a href = "profile.html"><img src={this.props.imageLink} className="img-responsive"/></a>
           </div>
           <div className="panel-footer">
+
             <a href = "profile.html" style = {nameStyle}><h3>{this.props.name}</h3></a>
-            <ul>
-              <li><a href = "https://twitter.com/DansReview">195k Twitter</a></li>
-            </ul>
+            <h5 style = {nameStyle}>{this.props.industry}</h5>
+            <ListOfLinks links = {this.props.socialLinks} />
+            <BadgeList tags = {this.props.badges} />
 
           </div>
         </div>
@@ -49,13 +69,21 @@ var InfluencersResultsRow = React.createClass({
 
   render: function(){
 
-    var createInfluencerProfile = function(infName, link){
-      return <InfluencersResultsProfile name = {infName} imageLink = {link} />;
+    var createInfluencerProfile = function(inf){
+      return <InfluencersResultsProfile
+        name = {inf.name}
+        imageLink = {inf.imageLink}
+        badges = {inf.badges}
+        socialLinks = {inf.socialLinks}
+        industry = {inf.industry}
+
+      />;
     };
 
+    console.log(this.props.influencers)
     return (
       <div className = "row">
-          <InfluencersResultsProfile name = {"Spike"} imageLink = {"#"}/>
+        {this.props.influencers.map(createInfluencerProfile)}
       </div>
     );
   }
