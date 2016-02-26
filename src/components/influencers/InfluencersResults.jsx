@@ -35,7 +35,6 @@ var InfluencersResults = React.createClass({
 			);
 		}
 
-
     mainContainerStyle = {
       marginTop: 70
     };

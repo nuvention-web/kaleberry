@@ -1,5 +1,5 @@
 var React = require('react');
-var InfluencersResultsProfile = require('./InfluencersResultsProfile.jsx');
+var InfluencersResultsRow = require('./InfluencersResultsProfile.jsx');
 
 var InfluencersResultsContent = React.createClass({
 
@@ -7,8 +7,7 @@ var InfluencersResultsContent = React.createClass({
 
     return(
       <div className = "container">
-        <InfluencersResultsProfile />
-        <InfluencersResultsProfile />
+        <InfluencersResultsRow />
       </div>
     );
   }

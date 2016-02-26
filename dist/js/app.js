@@ -80,7 +80,7 @@ var AltContainer = React.createClass(assign({
 
 module.exports = AltContainer
 
-},{"../utils/functions":18,"./mixinContainer":4,"react/addons":79}],4:[function(require,module,exports){
+},{"../utils/functions":17,"./mixinContainer":4,"react/addons":79}],4:[function(require,module,exports){
 var Subscribe = require('../mixins/Subscribe')
 var assign = require('../utils/functions').assign
 
@@ -258,7 +258,7 @@ function mixinContainer(React) {
 
 module.exports = mixinContainer
 
-},{"../mixins/Subscribe":13,"../utils/functions":18}],5:[function(require,module,exports){
+},{"../mixins/Subscribe":13,"../utils/functions":17}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -347,7 +347,7 @@ function makeAction(alt, namespace, name, implementation, obj) {
 }
 
 module.exports = exports['default'];
-},{"../symbols/symbols":10,"../utils/AltUtils":11,"es-symbol":24}],6:[function(require,module,exports){
+},{"../symbols/symbols":10,"../utils/AltUtils":11,"es-symbol":23}],6:[function(require,module,exports){
 /*global window*/
 'use strict';
 
@@ -658,7 +658,7 @@ var Alt = (function () {
 
 exports['default'] = Alt;
 module.exports = exports['default'];
-},{"../utils/functions":18,"./actions":5,"./store":9,"./symbols/symbols":10,"./utils/AltUtils":11,"./utils/StateFunctions":12,"flux":15}],7:[function(require,module,exports){
+},{"../utils/functions":17,"./actions":5,"./store":9,"./symbols/symbols":10,"./utils/AltUtils":11,"./utils/StateFunctions":12,"flux":14}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -793,7 +793,7 @@ var AltStore = (function () {
 
 exports['default'] = AltStore;
 module.exports = exports['default'];
-},{"../../utils/functions":18,"../symbols/symbols":10,"es-symbol":24,"eventemitter3":14}],8:[function(require,module,exports){
+},{"../../utils/functions":17,"../symbols/symbols":10,"es-symbol":23,"eventemitter3":24}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -999,7 +999,7 @@ var StoreMixin = {
 
 exports['default'] = StoreMixin;
 module.exports = exports['default'];
-},{"../../utils/functions":18,"../symbols/symbols":10,"es-symbol":24}],9:[function(require,module,exports){
+},{"../../utils/functions":17,"../symbols/symbols":10,"es-symbol":23}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1175,7 +1175,7 @@ function createStoreFromClass(alt, StoreModel, key) {
 
   return storeInstance;
 }
-},{"../../utils/functions":18,"../symbols/symbols":10,"../utils/AltUtils":11,"./AltStore":7,"./StoreMixin":8,"eventemitter3":14}],10:[function(require,module,exports){
+},{"../../utils/functions":17,"../symbols/symbols":10,"../utils/AltUtils":11,"./AltStore":7,"./StoreMixin":8,"eventemitter3":24}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1235,7 +1235,7 @@ exports.PUBLIC_METHODS = PUBLIC_METHODS;
 // contains all state
 var STATE_CONTAINER = (0, _esSymbol2['default'])();
 exports.STATE_CONTAINER = STATE_CONTAINER;
-},{"es-symbol":24}],11:[function(require,module,exports){
+},{"es-symbol":23}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1363,7 +1363,7 @@ function filterSnapshots(instance, state, stores) {
     return obj;
   }, {});
 }
-},{"../../utils/functions":18,"../symbols/symbols":10}],13:[function(require,module,exports){
+},{"../../utils/functions":17,"../symbols/symbols":10}],13:[function(require,module,exports){
 'use strict'
 var Symbol = require('es-symbol')
 var MIXIN_REGISTRY = Symbol('alt store listeners')
@@ -1392,238 +1392,7 @@ var Subscribe = {
 
 module.exports = Subscribe
 
-},{"es-symbol":24}],14:[function(require,module,exports){
-'use strict';
-
-/**
- * Representation of a single EventEmitter function.
- *
- * @param {Function} fn Event handler to be called.
- * @param {Mixed} context Context for function execution.
- * @param {Boolean} once Only emit once
- * @api private
- */
-function EE(fn, context, once) {
-  this.fn = fn;
-  this.context = context;
-  this.once = once || false;
-}
-
-/**
- * Minimal EventEmitter interface that is molded against the Node.js
- * EventEmitter interface.
- *
- * @constructor
- * @api public
- */
-function EventEmitter() { /* Nothing to set */ }
-
-/**
- * Holds the assigned EventEmitters by name.
- *
- * @type {Object}
- * @private
- */
-EventEmitter.prototype._events = undefined;
-
-/**
- * Return a list of assigned event listeners.
- *
- * @param {String} event The events that should be listed.
- * @returns {Array}
- * @api public
- */
-EventEmitter.prototype.listeners = function listeners(event) {
-  if (!this._events || !this._events[event]) return [];
-  if (this._events[event].fn) return [this._events[event].fn];
-
-  for (var i = 0, l = this._events[event].length, ee = new Array(l); i < l; i++) {
-    ee[i] = this._events[event][i].fn;
-  }
-
-  return ee;
-};
-
-/**
- * Emit an event to all registered event listeners.
- *
- * @param {String} event The name of the event.
- * @returns {Boolean} Indication if we've emitted an event.
- * @api public
- */
-EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
-  if (!this._events || !this._events[event]) return false;
-
-  var listeners = this._events[event]
-    , len = arguments.length
-    , args
-    , i;
-
-  if ('function' === typeof listeners.fn) {
-    if (listeners.once) this.removeListener(event, listeners.fn, true);
-
-    switch (len) {
-      case 1: return listeners.fn.call(listeners.context), true;
-      case 2: return listeners.fn.call(listeners.context, a1), true;
-      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
-      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
-      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
-      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
-    }
-
-    for (i = 1, args = new Array(len -1); i < len; i++) {
-      args[i - 1] = arguments[i];
-    }
-
-    listeners.fn.apply(listeners.context, args);
-  } else {
-    var length = listeners.length
-      , j;
-
-    for (i = 0; i < length; i++) {
-      if (listeners[i].once) this.removeListener(event, listeners[i].fn, true);
-
-      switch (len) {
-        case 1: listeners[i].fn.call(listeners[i].context); break;
-        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
-        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
-        default:
-          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
-            args[j - 1] = arguments[j];
-          }
-
-          listeners[i].fn.apply(listeners[i].context, args);
-      }
-    }
-  }
-
-  return true;
-};
-
-/**
- * Register a new EventListener for the given event.
- *
- * @param {String} event Name of the event.
- * @param {Functon} fn Callback function.
- * @param {Mixed} context The context of the function.
- * @api public
- */
-EventEmitter.prototype.on = function on(event, fn, context) {
-  var listener = new EE(fn, context || this);
-
-  if (!this._events) this._events = {};
-  if (!this._events[event]) this._events[event] = listener;
-  else {
-    if (!this._events[event].fn) this._events[event].push(listener);
-    else this._events[event] = [
-      this._events[event], listener
-    ];
-  }
-
-  return this;
-};
-
-/**
- * Add an EventListener that's only called once.
- *
- * @param {String} event Name of the event.
- * @param {Function} fn Callback function.
- * @param {Mixed} context The context of the function.
- * @api public
- */
-EventEmitter.prototype.once = function once(event, fn, context) {
-  var listener = new EE(fn, context || this, true);
-
-  if (!this._events) this._events = {};
-  if (!this._events[event]) this._events[event] = listener;
-  else {
-    if (!this._events[event].fn) this._events[event].push(listener);
-    else this._events[event] = [
-      this._events[event], listener
-    ];
-  }
-
-  return this;
-};
-
-/**
- * Remove event listeners.
- *
- * @param {String} event The event we want to remove.
- * @param {Function} fn The listener that we need to find.
- * @param {Boolean} once Only remove once listeners.
- * @api public
- */
-EventEmitter.prototype.removeListener = function removeListener(event, fn, once) {
-  if (!this._events || !this._events[event]) return this;
-
-  var listeners = this._events[event]
-    , events = [];
-
-  if (fn) {
-    if (listeners.fn && (listeners.fn !== fn || (once && !listeners.once))) {
-      events.push(listeners);
-    }
-    if (!listeners.fn) for (var i = 0, length = listeners.length; i < length; i++) {
-      if (listeners[i].fn !== fn || (once && !listeners[i].once)) {
-        events.push(listeners[i]);
-      }
-    }
-  }
-
-  //
-  // Reset the array, or remove it completely if we have no more listeners.
-  //
-  if (events.length) {
-    this._events[event] = events.length === 1 ? events[0] : events;
-  } else {
-    delete this._events[event];
-  }
-
-  return this;
-};
-
-/**
- * Remove all listeners or only the listeners for the specified event.
- *
- * @param {String} event The event want to remove all listeners for.
- * @api public
- */
-EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
-  if (!this._events) return this;
-
-  if (event) delete this._events[event];
-  else this._events = {};
-
-  return this;
-};
-
-//
-// Alias methods names because people roll like that.
-//
-EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
-EventEmitter.prototype.addListener = EventEmitter.prototype.on;
-
-//
-// This function doesn't apply anymore.
-//
-EventEmitter.prototype.setMaxListeners = function setMaxListeners() {
-  return this;
-};
-
-//
-// Expose the module.
-//
-EventEmitter.EventEmitter = EventEmitter;
-EventEmitter.EventEmitter2 = EventEmitter;
-EventEmitter.EventEmitter3 = EventEmitter;
-
-//
-// Expose the module.
-//
-module.exports = EventEmitter;
-
-},{}],15:[function(require,module,exports){
+},{"es-symbol":23}],14:[function(require,module,exports){
 /**
  * Copyright (c) 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -1635,7 +1404,7 @@ module.exports = EventEmitter;
 
 module.exports.Dispatcher = require('./lib/Dispatcher')
 
-},{"./lib/Dispatcher":16}],16:[function(require,module,exports){
+},{"./lib/Dispatcher":15}],15:[function(require,module,exports){
 /*
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -1887,7 +1656,7 @@ var _prefix = 'ID_';
 
 module.exports = Dispatcher;
 
-},{"./invariant":17}],17:[function(require,module,exports){
+},{"./invariant":16}],16:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -1942,7 +1711,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -1974,7 +1743,7 @@ function assign(target) {
   }, source);
   return target;
 }
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /*!
   Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -2024,7 +1793,7 @@ function assign(target) {
 	}
 }());
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -2190,7 +1959,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -2286,7 +2055,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":22,"./lib/keys.js":23}],22:[function(require,module,exports){
+},{"./lib/is_arguments.js":21,"./lib/keys.js":22}],21:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -2308,7 +2077,7 @@ function unsupported(object){
     false;
 };
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -2319,7 +2088,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 
 var globalSymbolRegistryList = {};
@@ -2470,6 +2239,237 @@ if (supportsAccessors) {
 
 module.exports = typeof Symbol === "function" ? Symbol : xSymbol;
 
+
+},{}],24:[function(require,module,exports){
+'use strict';
+
+/**
+ * Representation of a single EventEmitter function.
+ *
+ * @param {Function} fn Event handler to be called.
+ * @param {Mixed} context Context for function execution.
+ * @param {Boolean} once Only emit once
+ * @api private
+ */
+function EE(fn, context, once) {
+  this.fn = fn;
+  this.context = context;
+  this.once = once || false;
+}
+
+/**
+ * Minimal EventEmitter interface that is molded against the Node.js
+ * EventEmitter interface.
+ *
+ * @constructor
+ * @api public
+ */
+function EventEmitter() { /* Nothing to set */ }
+
+/**
+ * Holds the assigned EventEmitters by name.
+ *
+ * @type {Object}
+ * @private
+ */
+EventEmitter.prototype._events = undefined;
+
+/**
+ * Return a list of assigned event listeners.
+ *
+ * @param {String} event The events that should be listed.
+ * @returns {Array}
+ * @api public
+ */
+EventEmitter.prototype.listeners = function listeners(event) {
+  if (!this._events || !this._events[event]) return [];
+  if (this._events[event].fn) return [this._events[event].fn];
+
+  for (var i = 0, l = this._events[event].length, ee = new Array(l); i < l; i++) {
+    ee[i] = this._events[event][i].fn;
+  }
+
+  return ee;
+};
+
+/**
+ * Emit an event to all registered event listeners.
+ *
+ * @param {String} event The name of the event.
+ * @returns {Boolean} Indication if we've emitted an event.
+ * @api public
+ */
+EventEmitter.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
+  if (!this._events || !this._events[event]) return false;
+
+  var listeners = this._events[event]
+    , len = arguments.length
+    , args
+    , i;
+
+  if ('function' === typeof listeners.fn) {
+    if (listeners.once) this.removeListener(event, listeners.fn, true);
+
+    switch (len) {
+      case 1: return listeners.fn.call(listeners.context), true;
+      case 2: return listeners.fn.call(listeners.context, a1), true;
+      case 3: return listeners.fn.call(listeners.context, a1, a2), true;
+      case 4: return listeners.fn.call(listeners.context, a1, a2, a3), true;
+      case 5: return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+      case 6: return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+    }
+
+    for (i = 1, args = new Array(len -1); i < len; i++) {
+      args[i - 1] = arguments[i];
+    }
+
+    listeners.fn.apply(listeners.context, args);
+  } else {
+    var length = listeners.length
+      , j;
+
+    for (i = 0; i < length; i++) {
+      if (listeners[i].once) this.removeListener(event, listeners[i].fn, true);
+
+      switch (len) {
+        case 1: listeners[i].fn.call(listeners[i].context); break;
+        case 2: listeners[i].fn.call(listeners[i].context, a1); break;
+        case 3: listeners[i].fn.call(listeners[i].context, a1, a2); break;
+        default:
+          if (!args) for (j = 1, args = new Array(len -1); j < len; j++) {
+            args[j - 1] = arguments[j];
+          }
+
+          listeners[i].fn.apply(listeners[i].context, args);
+      }
+    }
+  }
+
+  return true;
+};
+
+/**
+ * Register a new EventListener for the given event.
+ *
+ * @param {String} event Name of the event.
+ * @param {Functon} fn Callback function.
+ * @param {Mixed} context The context of the function.
+ * @api public
+ */
+EventEmitter.prototype.on = function on(event, fn, context) {
+  var listener = new EE(fn, context || this);
+
+  if (!this._events) this._events = {};
+  if (!this._events[event]) this._events[event] = listener;
+  else {
+    if (!this._events[event].fn) this._events[event].push(listener);
+    else this._events[event] = [
+      this._events[event], listener
+    ];
+  }
+
+  return this;
+};
+
+/**
+ * Add an EventListener that's only called once.
+ *
+ * @param {String} event Name of the event.
+ * @param {Function} fn Callback function.
+ * @param {Mixed} context The context of the function.
+ * @api public
+ */
+EventEmitter.prototype.once = function once(event, fn, context) {
+  var listener = new EE(fn, context || this, true);
+
+  if (!this._events) this._events = {};
+  if (!this._events[event]) this._events[event] = listener;
+  else {
+    if (!this._events[event].fn) this._events[event].push(listener);
+    else this._events[event] = [
+      this._events[event], listener
+    ];
+  }
+
+  return this;
+};
+
+/**
+ * Remove event listeners.
+ *
+ * @param {String} event The event we want to remove.
+ * @param {Function} fn The listener that we need to find.
+ * @param {Boolean} once Only remove once listeners.
+ * @api public
+ */
+EventEmitter.prototype.removeListener = function removeListener(event, fn, once) {
+  if (!this._events || !this._events[event]) return this;
+
+  var listeners = this._events[event]
+    , events = [];
+
+  if (fn) {
+    if (listeners.fn && (listeners.fn !== fn || (once && !listeners.once))) {
+      events.push(listeners);
+    }
+    if (!listeners.fn) for (var i = 0, length = listeners.length; i < length; i++) {
+      if (listeners[i].fn !== fn || (once && !listeners[i].once)) {
+        events.push(listeners[i]);
+      }
+    }
+  }
+
+  //
+  // Reset the array, or remove it completely if we have no more listeners.
+  //
+  if (events.length) {
+    this._events[event] = events.length === 1 ? events[0] : events;
+  } else {
+    delete this._events[event];
+  }
+
+  return this;
+};
+
+/**
+ * Remove all listeners or only the listeners for the specified event.
+ *
+ * @param {String} event The event want to remove all listeners for.
+ * @api public
+ */
+EventEmitter.prototype.removeAllListeners = function removeAllListeners(event) {
+  if (!this._events) return this;
+
+  if (event) delete this._events[event];
+  else this._events = {};
+
+  return this;
+};
+
+//
+// Alias methods names because people roll like that.
+//
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+EventEmitter.prototype.addListener = EventEmitter.prototype.on;
+
+//
+// This function doesn't apply anymore.
+//
+EventEmitter.prototype.setMaxListeners = function setMaxListeners() {
+  return this;
+};
+
+//
+// Expose the module.
+//
+EventEmitter.EventEmitter = EventEmitter;
+EventEmitter.EventEmitter2 = EventEmitter;
+EventEmitter.EventEmitter3 = EventEmitter;
+
+//
+// Expose the module.
+//
+module.exports = EventEmitter;
 
 },{}],25:[function(require,module,exports){
 /**
@@ -3500,7 +3500,7 @@ function createHistory() {
 exports['default'] = createHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
-},{"./Actions":25,"./AsyncUtils":26,"./PathUtils":30,"./createLocation":35,"./deprecate":37,"./runTransitionHook":38,"_process":42,"deep-equal":21,"warning":257}],35:[function(require,module,exports){
+},{"./Actions":25,"./AsyncUtils":26,"./PathUtils":30,"./createLocation":35,"./deprecate":37,"./runTransitionHook":38,"_process":42,"deep-equal":20,"warning":257}],35:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -29206,7 +29206,7 @@ request.put = function(url, data, fn){
 
 module.exports = request;
 
-},{"emitter":20,"reduce":254}],257:[function(require,module,exports){
+},{"emitter":19,"reduce":254}],257:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -29394,7 +29394,7 @@ var ButtonGroup = React.createClass({displayName: "ButtonGroup",
 
 module.exports = ButtonGroup;
 
-},{"classnames":19,"react":253}],263:[function(require,module,exports){
+},{"classnames":18,"react":253}],263:[function(require,module,exports){
 var React = require('react');
 
 var ListItemWithLink = React.createClass({displayName: "ListItemWithLink",
@@ -29499,7 +29499,6 @@ var InfluencersResults = React.createClass({displayName: "InfluencersResults",
 			);
 		}
 
-
     mainContainerStyle = {
       marginTop: 70
     };
@@ -29523,7 +29522,7 @@ module.exports = InfluencersResults;
 
 },{"../../actions/InfluencersActions.js":258,"../../stores/InfluencersStore.js":271,"./InfluencersFilters.jsx":264,"./InfluencersResultsContent.jsx":266,"alt/AltContainer":2,"react":253}],266:[function(require,module,exports){
 var React = require('react');
-var InfluencersResultsProfile = require('./InfluencersResultsProfile.jsx');
+var InfluencersResultsRow = require('./InfluencersResultsProfile.jsx');
 
 var InfluencersResultsContent = React.createClass({displayName: "InfluencersResultsContent",
 
@@ -29531,8 +29530,7 @@ var InfluencersResultsContent = React.createClass({displayName: "InfluencersResu
 
     return(
       React.createElement("div", {className: "container"}, 
-        React.createElement(InfluencersResultsProfile, null), 
-        React.createElement(InfluencersResultsProfile, null)
+        React.createElement(InfluencersResultsRow, null)
       )
     );
   }
@@ -29543,36 +29541,77 @@ module.exports = InfluencersResultsContent;
 },{"./InfluencersResultsProfile.jsx":267,"react":253}],267:[function(require,module,exports){
 var React = require('react');
 
-var InfluencersResultsProfile = React.createClass({displayName: "InfluencersResultsProfile",
+var BadgeList = React.createClass({displayName: "BadgeList",
+  render: function(){
+    return(
+      this.props.tags.map(function(name){
+        return React.createElement("span", {className: "badge"}, name)
+      })
+    );
+  }
+});
 
+var InfluencersResultsProfile = React.createClass({displayName: "InfluencersResultsProfile",
   render: function(){
 
-    var rowStyle = {
-      borderStyle: "solid",
-      borderColor: "grey",
-      borderWidth: 1,
-      margin: 5
-    };
+    var panelStyle = {
+      padding: 0,
+    }
 
-    var colStyle = {
-      padding: 0
-    };
+    var nameStyle = {
+      textDecoration: "none",
+      textAlign: "center"
+    }
 
     return(
-      React.createElement("div", {className: "row", style: rowStyle}, 
-        React.createElement("div", {className: "col-md-3", style: colStyle}, 
-          React.createElement("img", {src: "./dog.jpg"})
-        ), 
+      React.createElement("div", {className: "col-md-3"}, 
+        React.createElement("div", {className: "panel panel-default"}, 
+          React.createElement("div", {className: "panel-body", style: panelStyle}, 
+            React.createElement("a", {href: "profile.html"}, React.createElement("img", {src: this.props.imageLink, className: "img-responsive"}))
+          ), 
+          React.createElement("div", {className: "panel-footer"}, 
+            React.createElement("a", {href: "profile.html", style: nameStyle}, React.createElement("h3", null, this.props.name)), 
+            React.createElement("ul", null, 
+              React.createElement("li", null, React.createElement("a", {href: "https://twitter.com/DansReview"}, "195k Twitter"))
+            )
 
-        React.createElement("div", {className: "col-md-9"}, 
-          "Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content"
+          )
         )
       )
     );
   }
 });
 
-module.exports = InfluencersResultsProfile;
+var InfluencersResultsRow = React.createClass({displayName: "InfluencersResultsRow",
+  getInitialState: function(){
+    var influencerList = {};
+      influencerList[1] = { name: 'Joey', imageLink: 'http://cdn4.list25.com/wp-content/uploads/2013/04/22-24_tn.jpg'};
+
+    return { influencers: influencerList };
+  },
+
+  render: function(){
+
+    var createInfluencerProfile = function(infName, link){
+      return React.createElement(InfluencersResultsProfile, {name: infName, imageLink: link});
+    };
+
+    return (
+      React.createElement("div", {className: "row"}, 
+         Object.keys(this.props.influencers).forEach(function (key) {
+          var curInf = this.props.influencers[key];
+          return (
+            React.createElement(InfluencersResultsProfile, {name: curInf[name], imageLink: curInf[imageLink]})
+          );
+          }
+        )
+      )
+    );
+  }
+
+});
+
+module.exports = InfluencersResultsRow;
 
 },{"react":253}],268:[function(require,module,exports){
 var API_ROOT = 'localhost:3000';
