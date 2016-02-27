@@ -29844,7 +29844,7 @@ var InfluencersFilters = React.createClass({displayName: "InfluencersFilters",
         React.createElement("div", {className: "row"}, 
             React.createElement(ButtonGroup, {title: "Type of Promotion ", items: ["Review", "Photo & Comment", "Sale for Fans"]}), 
             React.createElement("hr", null), 
-            React.createElement(ButtonGroup, {title: "Frequency ", itmes: ["One-Time Shoutout", "On-going relationship"]}), 
+            React.createElement(ButtonGroup, {title: "Frequency ", items: ["One-Time Shoutout", "On-going relationship"]}), 
             React.createElement("hr", null), 
             React.createElement(ButtonGroup, {title: "Personality ", items: ["Quirky", "Witty", "Bubbly", "Sassy", "Conservative"]}), 
             React.createElement("hr", null), 
@@ -30087,7 +30087,7 @@ var LandingPage = require('./components/LandingPage.jsx');
 var Routes = (
 	React.createElement(Router, {history: BrowserHistory}, 
 		React.createElement(Route, {path: "/", component: Index}, 
-			React.createElement(IndexRoute, {component: LandingPage}), 
+			React.createElement(IndexRoute, {component: InfluencersResults}), 
 			React.createElement(Route, {path: "influencerresults", component: InfluencersResults})
 		)
 	)

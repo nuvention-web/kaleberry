@@ -10,7 +10,7 @@ var InfluencersFilters = React.createClass({
         <div className = "row">
             <ButtonGroup title = {"Type of Promotion "} items = {["Review", "Photo & Comment", "Sale for Fans"]}/>
             <hr />
-            <ButtonGroup title = {"Frequency "} itmes ={["One-Time Shoutout", "On-going relationship"]} />
+            <ButtonGroup title = {"Frequency "} items ={["One-Time Shoutout", "On-going relationship"]} />
             <hr />
             <ButtonGroup title = {"Personality "} items = {["Quirky", "Witty", "Bubbly", "Sassy", "Conservative"]} />
             <hr />
