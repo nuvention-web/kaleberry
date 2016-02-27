@@ -29641,11 +29641,21 @@ module.exports = Index;
 var React = require('React');
 
 var SearchField = React.createClass({displayName: "SearchField",
+
+  getInitialState: function() {
+    return { value: ""};
+  },
+
+  onChange: function(e) {
+    var val = e.target.value;
+      this.setState({value: e.target.value});
+  },
+
   render: function(){
     return(
       React.createElement("div", {className: "col-md-2"}, 
         React.createElement("div", {className: "form-group form-group-lg"}, 
-          React.createElement("input", {type: "text", className: "form-control", placeholder: this.props.name})
+          React.createElement("input", {type: "text", className: "form-control", placeholder: this.props.name, onChange: this.onChange, value: this.state.value})
         )
       )
     );
@@ -29653,6 +29663,17 @@ var SearchField = React.createClass({displayName: "SearchField",
 });
 
 var LandingPage = React.createClass({displayName: "LandingPage",
+
+  onSubmit: function(e){
+    e.preventDefault();
+    console.log("clicked");
+    var searchParamaters = {
+      location: this.refs.location.state.value,
+      industry: this.refs.industry.state.value
+    };
+    //link here to search results page?
+  },
+
   render: function(){
     var titleStyle = {
         fontWeight: "bold"
@@ -29660,7 +29681,7 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
     var btnStyle = {
       borderColor: "#ED005F"
-    }
+    };
 
     return(
       React.createElement("div", {className: "container contentContainer", id: "topContainer"}, 
@@ -29678,24 +29699,21 @@ var LandingPage = React.createClass({displayName: "LandingPage",
 
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-md-5"}), 
-          React.createElement(SearchField, {name: "Location"}), 
-          React.createElement(SearchField, {name: "Industry"}), 
+          React.createElement(SearchField, {name: "Location", ref: "location"}), 
+          React.createElement(SearchField, {name: "Industry", ref: "industry"}), 
           React.createElement("br", null), 
           React.createElement("br", null)
     	 ), 
 
        React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-md-3 col-md-offset-6"}, 
-          React.createElement("a", {className: "btn btn-default btn-lg btn-block", style: btnStyle, href: "#", role: "button", id: "findInfluencers"}, "Find me influencers!")
+          React.createElement("a", {className: "btn btn-default btn-lg btn-block", style: btnStyle, href: "#", role: "button", id: "findInfluencers", onClick: this.props.onSubmit}, "Find me influencers!")
         )
        )
-    )
+      )
 
     );
   }
-
-
-
 });
 
 
@@ -29824,9 +29842,11 @@ var InfluencersFilters = React.createClass({displayName: "InfluencersFilters",
     return (
 
         React.createElement("div", {className: "row"}, 
-            React.createElement(ButtonGroup, {title: "Payment ", items: ["Pay Per Post", "Other Thing"]}), 
+            React.createElement(ButtonGroup, {title: "Type of Promotion ", items: ["Review", "Photo & Comment", "Sale for Fans"]}), 
             React.createElement("hr", null), 
-            React.createElement(ButtonGroup, {title: "Personality", items: ["Doc", "Grumpy", "Happy", "Sleepy", "Bashful", "Sneezy", "Dopey"]}), 
+            React.createElement(ButtonGroup, {title: "Frequency ", itmes: ["One-Time Shoutout", "On-going relationship"]}), 
+            React.createElement("hr", null), 
+            React.createElement(ButtonGroup, {title: "Personality ", items: ["Quirky", "Witty", "Bubbly", "Sassy", "Conservative"]}), 
             React.createElement("hr", null), 
             React.createElement(DropDownFormGroup, {title: "Budget", items: ["$0-$10", "$10-$30", "$30-$50", "$50-$75", "$75-$100", "$100+"]})
         )
