@@ -8,12 +8,14 @@ var BrowserHistory=require('react-router/lib/browserHistory');
 var Index = require('./components/Index.jsx');
 var InfluencersResults = require('./components/influencers/InfluencersResults.jsx');
 var LandingPage = require('./components/LandingPage.jsx');
+var InfluencerProfile = require('./components/influencers/InfluencerProfile.jsx');
 
 var Routes = (
 	<Router history = {BrowserHistory}>
 		<Route path="/" component={Index} >
 			<IndexRoute component={LandingPage} />
 			<Route path = "influencerresults" component = {InfluencersResults} />
+			<Route path = "influencerprofile" component = {InfluencerProfile} />
 		</Route>
 	</Router>
 );
