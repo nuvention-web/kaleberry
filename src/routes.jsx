@@ -13,7 +13,7 @@ var InfluencerProfile = require('./components/influencers/InfluencerProfile.jsx'
 var Routes = (
 	<Router history = {BrowserHistory}>
 		<Route path="/" component={Index} >
-			<IndexRoute component={LandingPage} />
+			<IndexRoute component={InfluencerProfile} />
 			<Route path = "influencerresults" component = {InfluencersResults} />
 			<Route path = "influencerprofile" component = {InfluencerProfile} />
 		</Route>
